@@ -139,6 +139,7 @@ public abstract class DigestEngine implements Digest {
 		}
 	}
 
+
 	/** @see Digest */
 	public void reset()
 	{
@@ -150,7 +151,7 @@ public abstract class DigestEngine implements Digest {
 	/** @see Digest */
 	public void update(byte input)
 	{
-		inputBuf[inputLen ++] = (byte)input;
+		inputBuf[inputLen ++] = input;
 		if (inputLen == blockLen) {
 			processBlock(inputBuf);
 			blockCount ++;
