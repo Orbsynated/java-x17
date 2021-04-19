@@ -4,7 +4,7 @@ import crypto.Digest;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.fail;
 import static utils.ByteArrayUtils.encodeLatin1;
 import static utils.ByteArrayUtils.strtobin;
 

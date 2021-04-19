@@ -92,9 +92,8 @@ import crypto.SHAvite256;
 import crypto.SHAvite384;
 import crypto.SHAvite512;
 import crypto.HMAC;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.Test;
+
 import static utils.ByteArrayUtils.*;
 import static utils.HelperFunctions.*;
 
@@ -134,12 +133,11 @@ import static utils.HelperFunctions.*;
  * @author    Thomas Pornin &lt;thomas.pornin@cryptolog.com&gt;
  */
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestDigest {
 
 
     @Test
-    void Start()
+    public void Start()
 	{
 		testMD2();
 		testMD4();
@@ -159,7 +157,6 @@ public class TestDigest {
 		testHAVAL();
 		testWhirlpool();
 		testRadioGatun();
-
 		testBLAKE224();
 		testBLAKE256();
 		testBLAKE384();
@@ -225,7 +222,7 @@ public class TestDigest {
 	/**
 	 * Test MD2 implementation.
 	 */
-	public static void testMD2()
+	public void testMD2()
 	{
 		Digest dig = new MD2();
 		testKat(dig, "", "8350e5a3e24c153df2275c9f80692773");
@@ -250,7 +247,7 @@ public class TestDigest {
 	/**
 	 * Test MD4 implementation.
 	 */
-	public static void testMD4()
+	public void testMD4()
 	{
 		Digest dig = new MD4();
 		testKat(dig, "", "31d6cfe0d16ae931b73c59d7e0c089c0");
@@ -291,7 +288,7 @@ public class TestDigest {
 	/**
 	 * Test MD5 implementation.
 	 */
-	public static void testMD5()
+	public void testMD5()
 	{
 		Digest dig = new MD5();
 		testKat(dig, "", "d41d8cd98f00b204e9800998ecf8427e");
@@ -344,7 +341,7 @@ public class TestDigest {
 	/**
 	 * Test SHA-0 implementation.
 	 */
-	public static void testSHA0()
+	public void testSHA0()
 	{
 		Digest dig = new SHA0();
 		testKat(dig, "abc", "0164b8a914cd2a5e74c4f7ff082c4d97f1edf880");
@@ -385,7 +382,7 @@ public class TestDigest {
 	/**
 	 * Test SHA-1 implementation.
 	 */
-	public static void testSHA1()
+	public void testSHA1()
 	{
 		Digest dig = new SHA1();
 		testKat(dig, "abc", "a9993e364706816aba3e25717850c26c9cd0d89d");
@@ -402,7 +399,7 @@ public class TestDigest {
 	/**
 	 * Test SHA-224 implementation.
 	 */
-	public static void testSHA224()
+	public void testSHA224()
 	{
 		Digest dig = new SHA224();
 		testKat(dig, "abc",
@@ -420,7 +417,7 @@ public class TestDigest {
 	/**
 	 * Test SHA-256 implementation.
 	 */
-	public static void testSHA256()
+	public void testSHA256()
 	{
 		Digest dig = new SHA256();
 		testKat(dig, "abc",
@@ -438,7 +435,7 @@ public class TestDigest {
 	/**
 	 * Test SHA-384 implementation.
 	 */
-	public static void testSHA384()
+	public void testSHA384()
 	{
 		Digest dig = new SHA384();
 		testKat(dig, "abc",
@@ -460,7 +457,7 @@ public class TestDigest {
 	/**
 	 * Test SHA-512 implementation.
 	 */
-	public static void testSHA512()
+	public void testSHA512()
 	{
 		Digest dig = new SHA512();
 		testKat(dig, "abc",
@@ -482,7 +479,7 @@ public class TestDigest {
 	/**
 	 * Test RIPEMD implementation.
 	 */
-	public static void testRIPEMD()
+	public void testRIPEMD()
 	{
 		Digest dig = new RIPEMD();
 		testKat(dig, "",
@@ -524,7 +521,7 @@ public class TestDigest {
 	/**
 	 * Test RIPEMD-128 implementation.
 	 */
-	public static void testRIPEMD128()
+	public void testRIPEMD128()
 	{
 		Digest dig = new RIPEMD128();
 		testKat(dig, "",
@@ -556,7 +553,7 @@ public class TestDigest {
 	/**
 	 * Test RIPEMD-160 implementation.
 	 */
-	public static void testRIPEMD160()
+	public void testRIPEMD160()
 	{
 		Digest dig = new RIPEMD160();
 		testKat(dig, "",
@@ -588,7 +585,7 @@ public class TestDigest {
 	/**
 	 * Test Tiger implementation.
 	 */
-	public static void testTiger()
+	public void testTiger()
 	{
 		Digest dig = new Tiger();
 		testKat(dig, "",
@@ -620,7 +617,7 @@ public class TestDigest {
 	/**
 	 * Test Tiger2 implementation.
 	 */
-	public static void testTiger2()
+	public void testTiger2()
 	{
 		Digest dig = new Tiger2();
 		testKat(dig, "",
@@ -652,7 +649,7 @@ public class TestDigest {
 	/**
 	 * Test PANAMA implementation.
 	 */
-	public static void testPANAMA()
+	public void testPANAMA()
 	{
 		Digest dig = new PANAMA();
 		testKat(dig, "",
@@ -671,7 +668,7 @@ public class TestDigest {
 	/**
 	 * Test HAVAL implementation.
 	 */
-	public static void testHAVAL()
+	public void testHAVAL()
 	{
 		Digest dig128_3 = new HAVAL128_3();
 		Digest dig128_4 = new HAVAL128_4();
@@ -933,7 +930,7 @@ public class TestDigest {
 	/**
 	 * Test Whirlpool implementation.
 	 */
-	public static void testWhirlpool()
+	public void testWhirlpool()
 	{
 		Digest dig = new Whirlpool();
 		Digest dig0 = new Whirlpool0();
@@ -996,7 +993,7 @@ public class TestDigest {
 	/**
 	 * Test RadioGatun implementation.
 	 */
-	public static void testRadioGatun()
+	public void testRadioGatun()
 	{
 		testKat(new RadioGatun32(), "", "F30028B54AFAB6B3E55355D277711109A19BEDA7091067E9A492FB5ED9F20117");
 		testKat(new RadioGatun32(), "0", "AF0D3F51B98E90EEEBAE86DD0B304A4003AC5F755FA2CAC2B6866A0A91C5C752");
@@ -1083,7 +1080,7 @@ public class TestDigest {
 	/**
 	 * Test Shabal-192 implementation.
 	 */
-	public static void testShabal192()
+	public void testShabal192()
 	{
 		testKat(new Shabal192(),
 			"abcdefghijklmnopqrstuvwxyz-0123456789-ABCDEFGHIJKLM"
@@ -1095,7 +1092,7 @@ public class TestDigest {
 	/**
 	 * Test Shabal-224 implementation.
 	 */
-	public static void testShabal224()
+	public void testShabal224()
 	{
 		testKatHex(new Shabal224(),
 			"",
@@ -1871,7 +1868,7 @@ public class TestDigest {
 	/**
 	 * Test Shabal-256 implementation.
 	 */
-	public static void testShabal256()
+	public void testShabal256()
 	{
 		testKatHex(new Shabal256(),
 			"",
@@ -2647,7 +2644,7 @@ public class TestDigest {
 	/**
 	 * Test Shabal-384 implementation.
 	 */
-	public static void testShabal384()
+	public void testShabal384()
 	{
 		testKatHex(new Shabal384(),
 			"",
@@ -3423,7 +3420,7 @@ public class TestDigest {
 	/**
 	 * Test Shabal-512 implementation.
 	 */
-	public static void testShabal512()
+	public void testShabal512()
 	{
 		testKatHex(new Shabal512(),
 			"",
@@ -4199,7 +4196,7 @@ public class TestDigest {
 	/**
 	 * Test BLAKE-224 implementation.
 	 */
-	public static void testBLAKE224()
+	public void testBLAKE224()
 	{
 		testKatHex(new BLAKE224(),
 			"",
@@ -4975,7 +4972,7 @@ public class TestDigest {
 	/**
 	 * Test BLAKE-256 implementation.
 	 */
-	public static void testBLAKE256()
+	public void testBLAKE256()
 	{
 		testKatHex(new BLAKE256(),
 			"",
@@ -5751,7 +5748,7 @@ public class TestDigest {
 	/**
 	 * Test BLAKE-384 implementation.
 	 */
-	public static void testBLAKE384()
+	public void testBLAKE384()
 	{
 		testKatHex(new BLAKE384(),
 			"",
@@ -6527,7 +6524,7 @@ public class TestDigest {
 	/**
 	 * Test BLAKE-512 implementation.
 	 */
-	public static void testBLAKE512()
+	public void testBLAKE512()
 	{
 		testKatHex(new BLAKE512(),
 			"",
@@ -7303,7 +7300,7 @@ public class TestDigest {
 	/**
 	 * Test Luffa-224 implementation.
 	 */
-	public static void testLuffa224()
+	public void testLuffa224()
 	{
 		testKatHex(new Luffa224(),
 			"616263",
@@ -7527,7 +7524,7 @@ public class TestDigest {
 	/**
 	 * Test Luffa-256 implementation.
 	 */
-	public static void testLuffa256()
+	public void testLuffa256()
 	{
 		testKatHex(new Luffa256(),
 			"616263",
@@ -7751,7 +7748,7 @@ public class TestDigest {
 	/**
 	 * Test Luffa-384 implementation.
 	 */
-	public static void testLuffa384()
+	public void testLuffa384()
 	{
 		testKatHex(new Luffa384(),
 			"",
@@ -7972,7 +7969,7 @@ public class TestDigest {
 	/**
 	 * Test Luffa-512 implementation.
 	 */
-	public static void testLuffa512()
+	public void testLuffa512()
 	{
 		testKatHex(new Luffa512(),
 			"",
@@ -8193,7 +8190,7 @@ public class TestDigest {
 	/**
 	 * Test ECHO-224 implementation.
 	 */
-	public static void testECHO224()
+	public void testECHO224()
 	{
 		testKatHex(new ECHO224(),
 			"",
@@ -8804,7 +8801,7 @@ public class TestDigest {
 	/**
 	 * Test ECHO-256 implementation.
 	 */
-	public static void testECHO256()
+	public void testECHO256()
 	{
 		testKatHex(new ECHO256(),
 			"",
@@ -9415,7 +9412,7 @@ public class TestDigest {
 	/**
 	 * Test ECHO-384 implementation.
 	 */
-	public static void testECHO384()
+	public void testECHO384()
 	{
 		testKatHex(new ECHO384(),
 			"",
@@ -10026,7 +10023,7 @@ public class TestDigest {
 	/**
 	 * Test ECHO-512 implementation.
 	 */
-	public static void testECHO512()
+	public void testECHO512()
 	{
 		testKatHex(new ECHO512(),
 			"",
@@ -10637,7 +10634,7 @@ public class TestDigest {
 	/**
 	 * Test SIMD-224 implementation.
 	 */
-	public static void testSIMD224()
+	public void testSIMD224()
 	{
 		testKatHex(new SIMD224(),
 			"000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
@@ -11035,7 +11032,7 @@ public class TestDigest {
 	/**
 	 * Test SIMD-256 implementation.
 	 */
-	public static void testSIMD256()
+	public void testSIMD256()
 	{
 		testKatHex(new SIMD256(),
 			"000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
@@ -11433,7 +11430,7 @@ public class TestDigest {
 	/**
 	 * Test SIMD-384 implementation.
 	 */
-	public static void testSIMD384()
+	public void testSIMD384()
 	{
 		testKatHex(new SIMD384(),
 			"000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
@@ -12212,7 +12209,7 @@ public class TestDigest {
 	/**
 	 * Test SIMD-512 implementation.
 	 */
-	public static void testSIMD512()
+	public void testSIMD512()
 	{
 		testKatHex(new SIMD512(),
 			"000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
@@ -12991,7 +12988,7 @@ public class TestDigest {
 	/**
 	 * Test Skein-224 implementation.
 	 */
-	public static void testSkein224()
+	public void testSkein224()
 	{
 		testKatHex(new Skein224(),
 			"",
@@ -13767,7 +13764,7 @@ public class TestDigest {
 	/**
 	 * Test Skein-256 implementation.
 	 */
-	public static void testSkein256()
+	public void testSkein256()
 	{
 		testKatHex(new Skein256(),
 			"",
@@ -14543,7 +14540,7 @@ public class TestDigest {
 	/**
 	 * Test Skein-384 implementation.
 	 */
-	public static void testSkein384()
+	public void testSkein384()
 	{
 		testKatHex(new Skein384(),
 			"",
@@ -15319,7 +15316,7 @@ public class TestDigest {
 	/**
 	 * Test Skein-512 implementation.
 	 */
-	public static void testSkein512()
+	public void testSkein512()
 	{
 		testKatHex(new Skein512(),
 			"",
@@ -16095,7 +16092,7 @@ public class TestDigest {
 	/**
 	 * Test JH-224 implementation.
 	 */
-	public static void testJH224()
+	public void testJH224()
 	{
 		testKatHex(new JH224(),
 			"",
@@ -16871,7 +16868,7 @@ public class TestDigest {
 	/**
 	 * Test JH-256 implementation.
 	 */
-	public static void testJH256()
+	public void testJH256()
 	{
 		testKatHex(new JH256(),
 			"",
@@ -17647,7 +17644,7 @@ public class TestDigest {
 	/**
 	 * Test JH-384 implementation.
 	 */
-	public static void testJH384()
+	public void testJH384()
 	{
 		testKatHex(new JH384(),
 			"",
@@ -18423,7 +18420,7 @@ public class TestDigest {
 	/**
 	 * Test JH-512 implementation.
 	 */
-	public static void testJH512()
+	public void testJH512()
 	{
 		testKatHex(new JH512(),
 			"",
@@ -19199,7 +19196,7 @@ public class TestDigest {
 	/**
 	 * Test Fugue-224 implementation.
 	 */
-	public static void testFugue224()
+	public void testFugue224()
 	{
 		testKatHex(new Fugue224(),
 			"",
@@ -19258,7 +19255,7 @@ public class TestDigest {
 	/**
 	 * Test Fugue-256 implementation.
 	 */
-	public static void testFugue256()
+	public void testFugue256()
 	{
 		testKatHex(new Fugue256(),
 			"",
@@ -19317,7 +19314,7 @@ public class TestDigest {
 	/**
 	 * Test Fugue-384 implementation.
 	 */
-	public static void testFugue384()
+	public void testFugue384()
 	{
 		testKatHex(new Fugue384(),
 			"",
@@ -19376,7 +19373,7 @@ public class TestDigest {
 	/**
 	 * Test Fugue-512 implementation.
 	 */
-	public static void testFugue512()
+	public void testFugue512()
 	{
 		testKatHex(new Fugue512(),
 			"",
@@ -19435,7 +19432,7 @@ public class TestDigest {
 	/**
 	 * Test BMW-224 implementation.
 	 */
-	public static void testBMW224()
+	public void testBMW224()
 	{
 		testKatHex(new BMW224(),
 			"616263",
@@ -19833,7 +19830,7 @@ public class TestDigest {
 	/**
 	 * Test BMW-256 implementation.
 	 */
-	public static void testBMW256()
+	public void testBMW256()
 	{
 		testKatHex(new BMW256(),
 			"",
@@ -20228,7 +20225,7 @@ public class TestDigest {
 	/**
 	 * Test BMW-384 implementation.
 	 */
-	public static void testBMW384()
+	public void testBMW384()
 	{
 		testKatHex(new BMW384(),
 			"616263",
@@ -21007,7 +21004,7 @@ public class TestDigest {
 	/**
 	 * Test BMW-512 implementation.
 	 */
-	public static void testBMW512()
+	public void testBMW512()
 	{
 		testKatHex(new BMW512(),
 			"",
@@ -21783,7 +21780,7 @@ public class TestDigest {
 	/**
 	 * Test CubeHash-224 implementation.
 	 */
-	public static void testCubeHash224()
+	public void testCubeHash224()
 	{
 		testKatHex(new CubeHash224(),
 			"",
@@ -21986,7 +21983,7 @@ public class TestDigest {
 	/**
 	 * Test CubeHash-256 implementation.
 	 */
-	public static void testCubeHash256()
+	public void testCubeHash256()
 	{
 		testKatHex(new CubeHash256(),
 			"",
@@ -22189,7 +22186,7 @@ public class TestDigest {
 	/**
 	 * Test CubeHash-384 implementation.
 	 */
-	public static void testCubeHash384()
+	public void testCubeHash384()
 	{
 		testKatHex(new CubeHash384(),
 			"",
@@ -22392,7 +22389,7 @@ public class TestDigest {
 	/**
 	 * Test CubeHash-512 implementation.
 	 */
-	public static void testCubeHash512()
+	public void testCubeHash512()
 	{
 		testKatHex(new CubeHash512(),
 			"",
@@ -22595,7 +22592,7 @@ public class TestDigest {
 	/**
 	 * Test Keccak-224 implementation.
 	 */
-	public static void testKeccak224()
+	public void testKeccak224()
 	{
 		testKatHex(new Keccak224(),
 			"",
@@ -23371,7 +23368,7 @@ public class TestDigest {
 	/**
 	 * Test Keccak-256 implementation.
 	 */
-	public static void testKeccak256()
+	public void testKeccak256()
 	{
 		testKatHex(new Keccak256(),
 			"",
@@ -24147,7 +24144,7 @@ public class TestDigest {
 	/**
 	 * Test Keccak-384 implementation.
 	 */
-	public static void testKeccak384()
+	public void testKeccak384()
 	{
 		testKatHex(new Keccak384(),
 			"",
@@ -24923,7 +24920,7 @@ public class TestDigest {
 	/**
 	 * Test Keccak-512 implementation.
 	 */
-	public static void testKeccak512()
+	public void testKeccak512()
 	{
 		testKatHex(new Keccak512(),
 			"",
@@ -25699,7 +25696,7 @@ public class TestDigest {
 	/**
 	 * Test Groestl-224 implementation.
 	 */
-	public static void testGroestl224()
+	public void testGroestl224()
 	{
 		testKatHex(new Groestl224(),
 			"",
@@ -26475,7 +26472,7 @@ public class TestDigest {
 	/**
 	 * Test Groestl-256 implementation.
 	 */
-	public static void testGroestl256()
+	public void testGroestl256()
 	{
 		testKatHex(new Groestl256(),
 			"",
@@ -27251,7 +27248,7 @@ public class TestDigest {
 	/**
 	 * Test Groestl-384 implementation.
 	 */
-	public static void testGroestl384()
+	public void testGroestl384()
 	{
 		testKatHex(new Groestl384(),
 			"",
@@ -28027,7 +28024,7 @@ public class TestDigest {
 	/**
 	 * Test Groestl-512 implementation.
 	 */
-	public static void testGroestl512()
+	public void testGroestl512()
 	{
 		testKatHex(new Groestl512(),
 			"",
@@ -28803,7 +28800,7 @@ public class TestDigest {
 	/**
 	 * Test Hamsi-224 implementation.
 	 */
-	public static void testHamsi224()
+	public void testHamsi224()
 	{
 		testKatHex(new Hamsi224(),
 			"",
@@ -28910,7 +28907,7 @@ public class TestDigest {
 	/**
 	 * Test Hamsi-256 implementation.
 	 */
-	public static void testHamsi256()
+	public void testHamsi256()
 	{
 		testKatHex(new Hamsi256(),
 			"",
@@ -29017,7 +29014,7 @@ public class TestDigest {
 	/**
 	 * Test Hamsi-384 implementation.
 	 */
-	public static void testHamsi384()
+	public void testHamsi384()
 	{
 		testKatHex(new Hamsi384(),
 			"",
@@ -29124,7 +29121,7 @@ public class TestDigest {
 	/**
 	 * Test Hamsi-512 implementation.
 	 */
-	public static void testHamsi512()
+	public void testHamsi512()
 	{
 		testKatHex(new Hamsi512(),
 			"",
@@ -29231,7 +29228,7 @@ public class TestDigest {
 	/**
 	 * Test SHAvite-224 implementation.
 	 */
-	public static void testSHAvite224()
+	public void testSHAvite224()
 	{
 		testKatHex(new SHAvite224(),
 			"",
@@ -30007,7 +30004,7 @@ public class TestDigest {
 	/**
 	 * Test SHAvite-256 implementation.
 	 */
-	public static void testSHAvite256()
+	public void testSHAvite256()
 	{
 		testKatHex(new SHAvite256(),
 			"",
@@ -30783,7 +30780,7 @@ public class TestDigest {
 	/**
 	 * Test SHAvite-384 implementation.
 	 */
-	public static void testSHAvite384()
+	public void testSHAvite384()
 	{
 		testKatHex(new SHAvite384(),
 			"",
@@ -31559,7 +31556,7 @@ public class TestDigest {
 	/**
 	 * Test SHAvite-512 implementation.
 	 */
-	public static void testSHAvite512()
+	public void testSHAvite512()
 	{
 		testKatHex(new SHAvite512(),
 			"",
@@ -32335,7 +32332,7 @@ public class TestDigest {
 	/**
 	 * Test HMAC implementation.
 	 */
-	public static void testHMAC()
+	public void testHMAC()
 	{
 		Digest hmac;
 
