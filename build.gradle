@@ -9,8 +9,30 @@ allprojects {
     version = '1.0'
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def LOCAL_PROPERTIES_FILENAME = "local.properties"
+
+def getFile = { dir, filename ->
+    File file = new File("$dir$File.separator$filename")
+    file?.exists() ? file : null
+}
+
+def getPropertyFile = { dir ->
+    return getFile(dir, LOCAL_PROPERTIES_FILENAME)
+}
+
+def getLocalProperties = { dir ->
+    def file = getPropertyFile(dir)
+    if (!file) {
+        return null
+    }
+
+    Properties properties = new Properties()
+    properties.load(file.newInputStream())
+    return properties
+}
+
+project.ext.localProperties = getLocalProperties(rootDir)
+
 
 // Add repositories
 allprojects { Project project ->
@@ -24,8 +46,8 @@ allprojects { Project project ->
                             url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
                             credentials {
                                 println project.properties
-                                username = properties.getProperty('JAVA_X17_GITHUB_USERNAME')
-                                password = properties.getProperty('JAVA_X17_GITHUB_TOKEN')
+                                username = project.ext.localProperties.getProperty('JAVA_X17_GITHUB_USERNAME')
+                                password = project.ext.localProperties.getProperty('JAVA_X17_GITHUB_TOKEN')
                             }
                         }
                     }
