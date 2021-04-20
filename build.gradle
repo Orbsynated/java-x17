@@ -23,7 +23,7 @@ def getPropertyFile = { dir ->
 def getLocalProperties = { dir ->
     def file = getPropertyFile(dir)
     if (!file) {
-        return null
+        return project.properties
     }
 
     Properties properties = new Properties()
@@ -45,9 +45,8 @@ allprojects { Project project ->
                             name = 'Github'
                             url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
                             credentials {
-                                println project.properties
-                                username = project.ext.localProperties.getProperty('JAVA_X17_GITHUB_USERNAME')
-                                password = project.ext.localProperties.getProperty('JAVA_X17_GITHUB_TOKEN')
+                                username = project.ext.localProperties['JAVA_X17_GITHUB_USERNAME']
+                                password = project.ext.localProperties['JAVA_X17_GITHUB_TOKEN']
                             }
                         }
                     }
