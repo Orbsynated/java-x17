@@ -1,6 +1,7 @@
 plugins {
-    id 'com.jfrog.bintray'
     id 'distribution'
+    id 'java'
+    id 'maven-publish'
 }
 
 allprojects {
@@ -8,13 +9,8 @@ allprojects {
     version = '1.0'
 }
 
-task buildDocumentation(type: Exec) {
-    inputs.dir 'docs/md'
-    inputs.file 'docs/mkdocs.yml'
-    outputs.dir 'docs/html'
-    executable 'sh'
-    args '-c', "docker run --volume $rootDir/docs:/docs --rm squidfunk/mkdocs-material:5.2.2 build"
-}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 // Add repositories
 allprojects { Project project ->
@@ -27,16 +23,9 @@ allprojects { Project project ->
                             name = 'Github'
                             url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
                             credentials {
-                                username = project.findProperty('JAVA_X17_GITHUB_USERNAME')
-                                password = project.findProperty('JAVA_X17_GITHUB_TOKEN')
-                            }
-                        }
-                        maven {
-                            name = 'Sonatype'
-                            url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-                            credentials(PasswordCredentials) {
-                                username = findProperty('JAVA_X17_STAGING_USERNAME')
-                                password = findProperty('JAVA_X17_STAGING_PASSWORD')
+                                println project.properties
+                                username = properties.getProperty('JAVA_X17_GITHUB_USERNAME')
+                                password = properties.getProperty('JAVA_X17_GITHUB_TOKEN')
                             }
                         }
                     }
@@ -55,7 +44,7 @@ allprojects { Project project ->
                     publications {
                         create(project.name, MavenPublication) {
                             pom {
-                                artifactId = "java-x17-$project.name"
+                                artifactId = "java-x17"
                                 name = "$group:$artifactId"
                                 licenses {
                                     license {
@@ -112,50 +101,12 @@ allprojects { Project project ->
     }
 }
 
-// Configure bintray
-allprojects { Project project ->
-    afterEvaluate {
-        if (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('com.jfrog.bintray')) {
-            configure(project) {
-                bintray {
-                    Publication pub = publishing.publications.getByName(project.name)
-                    user = findProperty('JAVA_X17_BINTRAY_USER')
-                    key = findProperty('JAVA_X17_BINTRAY_KEY')
-                    publications = [project.name]
-                    dryRun = false
-                    override = true
-                    pkg {
-                        repo = 'java-x17'
-                        name = "$project.group:$pub.artifactId"
-                        desc = pub.artifactId
-                        licenses = ['GPL-2.0']
-                        websiteUrl = pub.pom.url.get()
-                        issueTrackerUrl = pub.pom.issueManagement.url.get()
-                        vcsUrl = pub.pom.scm.url.get()
-                        version {
-                            name = project.version
-                            gpg.sign = true
-                            released = new Date()
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 distributions {
     main {
         distributionBaseName.set('java-x17')
         contents {
             into('lib') {
                 from tasks.getByPath(':X17:fatJar').outputs
-            }
-            into('docs') {
-                from('docs/md') {
-                    includeEmptyDirs = false
-                    include '**/*.md'
-                }
             }
             from(rootDir) {
                 include 'bin/'
