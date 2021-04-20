@@ -97,7 +97,6 @@ import org.junit.Test;
 import static utils.ByteArrayUtils.*;
 import static utils.HelperFunctions.*;
 
-
 /**
  * This class is a program entry point; it includes tests for the
  * implementation of the hash functions.

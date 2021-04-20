@@ -1,59 +1,177 @@
 plugins {
-    id 'java-library'
-    id 'maven'
-    id 'eclipse'
+    id 'com.jfrog.bintray'
+    id 'distribution'
 }
 
-group 'org.hash'
-version '1.0'
-
-repositories {
-    mavenCentral()
+allprojects {
+    group = 'org.hash'
+    version = '1.0'
 }
 
-dependencies {
-    api 'com.google.guava:guava:30.0-android'
-
-    testImplementation 'junit:junit:4.13.1'
-
-    implementation("com.madgag.spongycastle:core:1.58.0.0")
+task buildDocumentation(type: Exec) {
+    inputs.dir 'docs/md'
+    inputs.file 'docs/mkdocs.yml'
+    outputs.dir 'docs/html'
+    executable 'sh'
+    args '-c', "docker run --volume $rootDir/docs:/docs --rm squidfunk/mkdocs-material:5.2.2 build"
 }
 
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
-javadoc.options.encoding = 'UTF-8'
-
-
-ext.moduleName = 'org.hash'
-
-jar {
-    inputs.property("moduleName", moduleName)
-    manifest {
-        attributes 'Automatic-Module-Name': moduleName
+// Add repositories
+allprojects { Project project ->
+    afterEvaluate {
+        if (pluginManager.hasPlugin('maven-publish')) {
+            configure(project) {
+                publishing {
+                    repositories {
+                        maven {
+                            name = 'Github'
+                            url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
+                            credentials {
+                                username = project.findProperty('JAVA_X17_GITHUB_USERNAME')
+                                password = project.findProperty('JAVA_X17_GITHUB_TOKEN')
+                            }
+                        }
+                        maven {
+                            name = 'Sonatype'
+                            url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                            credentials(PasswordCredentials) {
+                                username = findProperty('JAVA_X17_STAGING_USERNAME')
+                                password = findProperty('JAVA_X17_STAGING_PASSWORD')
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+// Add publication
+allprojects { Project project ->
+    afterEvaluate {
+        if (pluginManager.hasPlugin('maven-publish')) {
+            configure(project) {
+                publishing {
+                    publications {
+                        create(project.name, MavenPublication) {
+                            pom {
+                                artifactId = "java-x17-$project.name"
+                                name = "$group:$artifactId"
+                                licenses {
+                                    license {
+                                        name = 'GNU General Public License, Version 2'
+                                        url = 'https://www.gnu.org/licenses/gpl-2.0.txt'
+                                        distribution = 'repo'
+                                    }
+                                }
+                                issueManagement {
+                                    system = 'Github Tracker'
+                                    url = 'https://github.com/Orbsynated/java-x17/issues'
+                                }
+                                scm {
+                                    url = 'https://github.com/Orbsynated/java-x17.git'
+                                    connection = 'scm:git:https://github.com/Orbsynated/java-x17.git'
+                                }
+                                developers {
+                                    developer {
+                                        id = 'lafortune'
+                                        name = 'Orbsynated'
+                                        roles = ['Project Administrator', 'Developer']
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-test {
-    testLogging {
-        events "failed"
-        exceptionFormat "full"
+// Configure default publication (all Java projects)
+allprojects { Project project ->
+    afterEvaluate {
+        if  (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('java')) {
+            configure(project) {
+                javadoc {
+                    options.addStringOption('Xdoclint:none', '-quiet')
+                }
+                java {
+                    withJavadocJar()
+                    withSourcesJar()
+                }
+                publishing {
+                    publications {
+                        getByName(project.name) {
+                            from components.java
+                        }
+                    }
+                }
+            }
+        }
     }
+}
+
+// Configure bintray
+allprojects { Project project ->
+    afterEvaluate {
+        if (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('com.jfrog.bintray')) {
+            configure(project) {
+                bintray {
+                    Publication pub = publishing.publications.getByName(project.name)
+                    user = findProperty('JAVA_X17_BINTRAY_USER')
+                    key = findProperty('JAVA_X17_BINTRAY_KEY')
+                    publications = [project.name]
+                    dryRun = false
+                    override = true
+                    pkg {
+                        repo = 'java-x17'
+                        name = "$project.group:$pub.artifactId"
+                        desc = pub.artifactId
+                        licenses = ['GPL-2.0']
+                        websiteUrl = pub.pom.url.get()
+                        issueTrackerUrl = pub.pom.issueManagement.url.get()
+                        vcsUrl = pub.pom.scm.url.get()
+                        version {
+                            name = project.version
+                            gpg.sign = true
+                            released = new Date()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+distributions {
+    main {
+        distributionBaseName.set('java-x17')
+        contents {
+            into('lib') {
+                from tasks.getByPath(':X17:fatJar').outputs
+            }
+            into('docs') {
+                from('docs/md') {
+                    includeEmptyDirs = false
+                    include '**/*.md'
+                }
+            }
+            from(rootDir) {
+                include 'bin/'
+                include 'examples/'
+                include 'LICENSE'
+                include 'LICENSE_exception.md'
+            }
+        }
+    }
+}
+
+distTar {
+    compression = Compression.GZIP
+    archiveExtension.set('tar.gz')
+}
+
+clean {
+    delete file("$rootDir/lib")
 }

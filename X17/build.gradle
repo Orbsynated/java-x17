@@ -1,0 +1,57 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id 'java-library'
+    id 'maven-publish'
+}
+
+repositories {
+    jcenter()
+}
+
+sourceSets.main {
+    java {
+        srcDirs = ['Hash']
+    }
+}
+sourceSets.test {
+    java {
+        srcDirs = ['test/Hash']
+    }
+}
+
+dependencies {
+    api 'com.google.guava:guava:30.0-android'
+
+    testImplementation 'junit:junit:4.13.1'
+
+    implementation("com.madgag.spongycastle:core:1.58.0.0")
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+javadoc.options.encoding = 'UTF-8'
+
+jar.manifest.attributes('Implementation-Version': version)
+
+task fatJar(type: ShadowJar) {
+    destinationDirectory.set(file("$rootDir/lib"))
+    archiveFileName.set('java-x17.jar')
+    from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
+    manifest {
+        attributes(
+                'Main-Class': 'Hash.X17',
+                'Implementation-Version': archiveVersion.get())
+    }
+}
+
+assemble.dependsOn fatJar
+
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+}
