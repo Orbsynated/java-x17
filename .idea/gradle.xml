@@ -11,7 +11,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/X17" />
+            <option value="$PROJECT_DIR$/x17" />
           </set>
         </option>
       </GradleProjectSettings>

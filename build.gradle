@@ -1,55 +1,27 @@
 plugins {
     id 'distribution'
-    id 'java'
-    id 'maven-publish'
+    id 'signing'
 }
 
 allprojects {
-    group = 'org.hash'
-    version = '1.0'
+    group = 'io.github.orbsynated'
+    version = '1.0.4'
 }
 
-def LOCAL_PROPERTIES_FILENAME = "local.properties"
-
-def getFile = { dir, filename ->
-    File file = new File("$dir$File.separator$filename")
-    file?.exists() ? file : null
-}
-
-def getPropertyFile = { dir ->
-    return getFile(dir, LOCAL_PROPERTIES_FILENAME)
-}
-
-def getLocalProperties = { dir ->
-    def file = getPropertyFile(dir)
-    if (!file) {
-        return project.properties
-    }
-
-    Properties properties = new Properties()
-    properties.load(file.newInputStream())
-    return properties
-}
-
-project.ext.localProperties = getLocalProperties(rootDir)
-
-
-// Add repositories
+// Configure default publication (all Java projects)
 allprojects { Project project ->
     afterEvaluate {
-        if (pluginManager.hasPlugin('maven-publish')) {
+        if (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('java')) {
             configure(project) {
-                publishing {
-                    repositories {
-                        maven {
-                            name = 'Github'
-                            url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
-                            credentials {
-                                username = project.ext.localProperties['JAVA_X17_GITHUB_USERNAME']
-                                password = project.ext.localProperties['JAVA_X17_GITHUB_TOKEN']
-                            }
-                        }
+                javadoc {
+                    options.addStringOption('Xdoclint:none', '-quiet')
+                    if(JavaVersion.current().isJava9Compatible()) {
+                        options.addBooleanOption('html5', true)
                     }
+                }
+                java {
+                    withJavadocJar()
+                    withSourcesJar()
                 }
             }
         }
@@ -64,8 +36,17 @@ allprojects { Project project ->
                 publishing {
                     publications {
                         create(project.name, MavenPublication) {
+                            artifactId = "java-${project.name.toLowerCase()}"
+                            from components.java
+                            versionMapping {
+                                usage('java-api') {
+                                    fromResolutionOf('runtimeClasspath')
+                                }
+                                usage('java-runtime') {
+                                    fromResolutionResult()
+                                }
+                            }
                             pom {
-                                artifactId = "java-x17"
                                 name = "$group:$artifactId"
                                 licenses {
                                     license {
@@ -98,23 +79,37 @@ allprojects { Project project ->
     }
 }
 
-// Configure default publication (all Java projects)
+
+// Add repositories
 allprojects { Project project ->
     afterEvaluate {
-        if  (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('java')) {
+        if (pluginManager.hasPlugin('maven-publish')) {
             configure(project) {
-                javadoc {
-                    options.addStringOption('Xdoclint:none', '-quiet')
-                }
-                java {
-                    withJavadocJar()
-                    withSourcesJar()
-                }
                 publishing {
-                    publications {
-                        getByName(project.name) {
-                            from components.java
+                    repositories {
+                        maven {
+                            name = 'Github'
+                            url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
+                            credentials {
+                                username = findProperty('JAVA_X17_GITHUB_USERNAME')
+                                password = findProperty('JAVA_X17_GITHUB_TOKEN')
+                            }
                         }
+//                        maven {
+//                            name = 'Sonatype'
+//                            url = 'https://oss.sonatype.org/content/repositories/snapshots'
+//                            credentials(PasswordCredentials) {
+//                                username = findProperty('PROGUARD_STAGING_USERNAME')
+//                                password = findProperty('PROGUARD_STAGING_PASSWORD')
+//                            }
+//                        }
+                    }
+                }
+                if (findProperty('SHOULD_SIGN')) {
+                    signing {
+                        // signing.gnupg.keyName and signing.gnupg.passphrase is set in .gradle/gradle.properties
+                        useGpgCmd()
+                        sign publishing.publications.getByName(project.name)
                     }
                 }
             }
@@ -127,13 +122,10 @@ distributions {
         distributionBaseName.set('java-x17')
         contents {
             into('lib') {
-                from tasks.getByPath(':X17:fatJar').outputs
+                from tasks.getByPath(':x17:fatJar').outputs
             }
             from(rootDir) {
-                include 'bin/'
-                include 'examples/'
                 include 'LICENSE'
-                include 'LICENSE_exception.md'
             }
         }
     }

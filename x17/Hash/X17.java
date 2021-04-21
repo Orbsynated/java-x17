@@ -1,5 +1,5 @@
 import crypto.*;
-import org.spongycastle.util.Arrays;
+import static org.spongycastle.util.Arrays.reverse;
 
 import static utils.ByteArrayUtils.trim256;
 
@@ -96,8 +96,9 @@ public class X17 {
     haval256_5_context.update(input, 0, 64);
     input = haval256_5_context.digest();
 
-    input = Arrays.reverse(input);
+    input = reverse(input);
 
     return trim256(input);
   }
+
 }
