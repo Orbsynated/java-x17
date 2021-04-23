@@ -29,12 +29,16 @@ public class ByteArrayUtils {
     }
 
     /**
-     * Get the bytes representation of a given string encoded in UTF-8
+     * Get the bytes representation of a given string
      * @param str Input string
      */
     public static byte[] stringToBytes(String str)
     {
-        return str.getBytes(StandardCharsets.UTF_8);
+        int blen = str.length();
+        byte[] buf = new byte[blen];
+        for (int i = 0; i < blen; i ++)
+            buf[i] = (byte)str.charAt(i);
+        return buf;
     }
 
     /**
