@@ -3,6 +3,11 @@ import static org.spongycastle.util.Arrays.reverse;
 
 import static utils.ByteArrayUtils.trim256;
 
+/**
+ * This implements the X17 Hash algorithm
+ * @author Orbsynated
+ * @version v1.0.0
+ */
 public class X17 {
   private static final Digest blake512_context;
   private static final Digest bmw512_context;
@@ -44,6 +49,11 @@ public class X17 {
 
   public X17() {}
 
+  /**
+   * Compute the X17 Hash for a given byte array
+   * @param input Input byte array to be hashed
+   * @return Output of the X17 hash algorithm
+   */
   public byte[] HashX17(byte[] input) {
     blake512_context.update(input, 0, input.length);
     input = blake512_context.digest();

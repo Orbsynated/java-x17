@@ -1,27 +1,38 @@
 plugins {
     id 'distribution'
     id 'signing'
+    id 'idea'
 }
 
 allprojects {
     group = 'io.github.orbsynated'
-    version = '1.0.4'
+    version = '1.0.0'
 }
 
-// Configure default publication (all Java projects)
+// Add repositories
 allprojects { Project project ->
     afterEvaluate {
-        if (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('java')) {
+        if (pluginManager.hasPlugin('maven-publish')) {
             configure(project) {
-                javadoc {
-                    options.addStringOption('Xdoclint:none', '-quiet')
-                    if(JavaVersion.current().isJava9Compatible()) {
-                        options.addBooleanOption('html5', true)
+                publishing {
+                    repositories {
+                        maven {
+                            name = 'Github'
+                            url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
+                            credentials {
+                                username = findProperty('JAVA_X17_GITHUB_USERNAME')
+                                password = findProperty('JAVA_X17_GITHUB_TOKEN')
+                            }
+                        }
+                        maven {
+                            name = 'Sonatype'
+                            url = 'https://s01.oss.sonatype.org/content/groups/staging/'
+                            credentials(PasswordCredentials) {
+                                username = findProperty('PROGUARD_STAGING_USERNAME')
+                                password = findProperty('PROGUARD_STAGING_PASSWORD')
+                            }
+                        }
                     }
-                }
-                java {
-                    withJavadocJar()
-                    withSourcesJar()
                 }
             }
         }
@@ -37,7 +48,6 @@ allprojects { Project project ->
                     publications {
                         create(project.name, MavenPublication) {
                             artifactId = "java-${project.name.toLowerCase()}"
-                            from components.java
                             versionMapping {
                                 usage('java-api') {
                                     fromResolutionOf('runtimeClasspath')
@@ -79,30 +89,26 @@ allprojects { Project project ->
     }
 }
 
-
-// Add repositories
+// Configure default publication (all Java projects)
 allprojects { Project project ->
     afterEvaluate {
-        if (pluginManager.hasPlugin('maven-publish')) {
+        if  (pluginManager.hasPlugin('maven-publish') && pluginManager.hasPlugin('java')) {
             configure(project) {
+                javadoc {
+                    options.addStringOption('Xdoclint:none', '-quiet')
+                    if(JavaVersion.current().isJava9Compatible()) {
+                        options.addBooleanOption('html5', true)
+                    }
+                }
+                java {
+                    withJavadocJar()
+                    withSourcesJar()
+                }
                 publishing {
-                    repositories {
-                        maven {
-                            name = 'Github'
-                            url = uri('https://maven.pkg.github.com/Orbsynated/java-x17')
-                            credentials {
-                                username = findProperty('JAVA_X17_GITHUB_USERNAME')
-                                password = findProperty('JAVA_X17_GITHUB_TOKEN')
-                            }
+                    publications {
+                        getByName(project.name) {
+                            from components.java
                         }
-//                        maven {
-//                            name = 'Sonatype'
-//                            url = 'https://oss.sonatype.org/content/repositories/snapshots'
-//                            credentials(PasswordCredentials) {
-//                                username = findProperty('PROGUARD_STAGING_USERNAME')
-//                                password = findProperty('PROGUARD_STAGING_PASSWORD')
-//                            }
-//                        }
                     }
                 }
                 if (findProperty('SHOULD_SIGN')) {
@@ -117,9 +123,10 @@ allprojects { Project project ->
     }
 }
 
+
 distributions {
     main {
-        distributionBaseName.set('java-x17')
+        distributionBaseName.set('Java-X17')
         contents {
             into('lib') {
                 from tasks.getByPath(':x17:fatJar').outputs

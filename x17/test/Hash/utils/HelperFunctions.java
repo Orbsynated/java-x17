@@ -5,8 +5,8 @@ import crypto.Digest;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.fail;
-import static utils.ByteArrayUtils.encodeLatin1;
-import static utils.ByteArrayUtils.strtobin;
+import static utils.ByteArrayUtils.stringToBytes;
+import static utils.ByteArrayUtils.hexEncodedStringToBytes;
 
 public abstract class HelperFunctions {
     public static void reportSuccess(String name)
@@ -16,7 +16,7 @@ public abstract class HelperFunctions {
 
     public static void testKatHex(Digest dig, String data, String ref)
     {
-        testKat(dig, strtobin(data), strtobin(ref));
+        testKat(dig, hexEncodedStringToBytes(data), hexEncodedStringToBytes(ref));
     }
 
     public static void testX17(byte[] output, byte[] expected ){
@@ -28,8 +28,8 @@ public abstract class HelperFunctions {
     }
     public static void testCollision(Digest dig, String s1, String s2)
     {
-        byte[] msg1 = strtobin(s1);
-        byte[] msg2 = strtobin(s2);
+        byte[] msg1 = hexEncodedStringToBytes(s1);
+        byte[] msg2 = hexEncodedStringToBytes(s2);
         assertNotEquals(msg1, msg2);
         assertEquals(dig.digest(msg1), dig.digest(msg2));
     }
@@ -41,7 +41,7 @@ public abstract class HelperFunctions {
             buf[i] = 'a';
         for (int i = 0; i < 1000; i ++)
             dig.update(buf);
-        assertEquals(dig.digest(), strtobin(ref));
+        assertEquals(dig.digest(), hexEncodedStringToBytes(ref));
     }
 
 
@@ -53,7 +53,7 @@ public abstract class HelperFunctions {
 
     public static void testKat(Digest dig, String data, String ref)
     {
-        testKat(dig, encodeLatin1(data), strtobin(ref));
+        testKat(dig, stringToBytes(data), hexEncodedStringToBytes(ref));
     }
 
 
