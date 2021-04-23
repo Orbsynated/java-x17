@@ -58,6 +58,8 @@ allprojects { Project project ->
                             }
                             pom {
                                 name = "$group:$artifactId"
+                                url = "https://github.com/Orbsynated/java-x17"
+                                description = "Library that implements the X17 hash and required functions in Java."
                                 licenses {
                                     license {
                                         name = 'GNU General Public License, Version 2'
@@ -75,7 +77,7 @@ allprojects { Project project ->
                                 }
                                 developers {
                                     developer {
-                                        id = 'lafortune'
+                                        id = 'orb'
                                         name = 'Orbsynated'
                                         roles = ['Project Administrator', 'Developer']
                                     }
