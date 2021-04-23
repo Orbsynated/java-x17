@@ -21,6 +21,16 @@ Or use the awesome, built from source, <https://jitpack.io/> version, you'll nee
         </repository>
 ```
 
+And setup the following dependency:
+```xml
+        <dependency>
+            <groupId>com.github.orbsynated</groupId>
+            <artifactId>java-x17</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+```
+
+
 If you use gradle:
 
 ```gradle
