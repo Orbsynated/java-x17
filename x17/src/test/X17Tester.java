@@ -1,14 +1,15 @@
 import org.junit.Test;
 import org.spongycastle.util.encoders.Hex;
+import hash.X17MessageDigest;
 
 import static utils.HelperFunctions.*;
 
 public class X17Tester {
 
-  private static final X17 x17;
+  private static final X17MessageDigest x17;
 
   static {
-    x17 = new X17();
+    x17 = new X17MessageDigest();
   }
 
   @Test

@@ -1,3 +1,4 @@
+package hash;
 import crypto.*;
 import static org.spongycastle.util.Arrays.reverse;
 
@@ -6,9 +7,9 @@ import static utils.ByteArrayUtils.trim256;
 /**
  * This implements the X17 Hash algorithm
  * @author Orbsynated
- * @version v1.0.0
+ * @version v1.0.1
  */
-public class X17 {
+public class X17MessageDigest {
   private static final Digest blake512_context;
   private static final Digest bmw512_context;
   private static final Digest groestl512_context;
@@ -47,7 +48,7 @@ public class X17 {
     haval256_5_context = new HAVAL256_5();
   }
 
-  public X17() {}
+  public X17MessageDigest() {}
 
   /**
    * Compute the X17 Hash for a given byte array
