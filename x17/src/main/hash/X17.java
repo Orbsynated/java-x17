@@ -19,11 +19,11 @@ public class X17 extends X17Core {
    */
   @Override
   public int getDigestLength() {
-    return 64;
+    return 32;
   }
 
   /**
-   * Clone the current state. The returned object evolves independantly of this object.
+   * Clone the current state. The returned object evolves independently of this object.
    *
    * @return the clone
    */
