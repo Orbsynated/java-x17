@@ -6,7 +6,7 @@ import crypto.Digest;
  * This implements the X17 Hash algorithm
  *
  * @author Orbsynated
- * @version v1.0.1
+ * @version v1.1.0
  */
 public class X17Digest extends X17Core {
 
