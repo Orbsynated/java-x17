@@ -52,7 +52,7 @@ task fatJar(type: ShadowJar) {
     configurations = [project.configurations.runtimeClasspath]
     manifest {
         attributes(
-                'Main-Class': 'hash.X17MessageDigest',
+                'Main-Class': 'hash.X17Digest',
                 'Implementation-Version': archiveVersion.get())
     }
 }

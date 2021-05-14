@@ -8,9 +8,9 @@ import crypto.Digest;
  * @author Orbsynated
  * @version v1.0.1
  */
-public class X17 extends X17Core {
+public class X17Digest extends X17Core {
 
-  public X17() {}
+  public X17Digest() {}
 
   /**
    * Get the natural hash function output length (in bytes).
@@ -29,6 +29,6 @@ public class X17 extends X17Core {
    */
   @Override
   public Digest copy() {
-    return copyState(new X17());
+    return copyState(new X17Digest());
   }
 }

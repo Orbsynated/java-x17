@@ -4,12 +4,7 @@ import crypto.*;
 
 import static org.spongycastle.util.Arrays.reverse;
 
-abstract class X17Core extends DigestEngine {
-  /*
-  Algorithms needed to compute the x17 hash.
-  Declared in order of hashing.
-   */
-  private Digest blake512_context;
+public abstract class X17Core extends DigestEngine {
   private final Digest bmw512_context;
   private final Digest groestl512_context;
   private final Digest skein512_context;
@@ -26,9 +21,10 @@ abstract class X17Core extends DigestEngine {
   private final Digest whirlpool_context;
   private final Digest sha512_context;
   private final Digest haval256_5_context;
+  private Digest blake512_context;
   private byte[] tmpOutput;
 
-  X17Core() {
+  public X17Core() {
     blake512_context = new BLAKE512();
     bmw512_context = new BMW512();
     groestl512_context = new Groestl512();
@@ -135,7 +131,8 @@ abstract class X17Core extends DigestEngine {
 
   /** @see Digest */
   public int getBlockLength() {
-    // Block length doesn't matter because we relay on the other algorithms block length via the 'update' function
+    // Block length doesn't matter because we relay on the other algorithms block length via the
+    // 'update' function
     // Value set to 128 to be the same as most algorithms and to not break digest engine
     return 128;
   }
